@@ -25,7 +25,6 @@ modules:
       - https://packages.microsoft.com/keys/microsoft.asc
     install:
       # Hyprland Packages
-      - greetd
       - hypridle
       - hyprland
       - hyprlock
@@ -34,7 +33,6 @@ modules:
       - hyprpolkitagent
       - hyprshot
       - rofi-wayland
-      - tuigreet
       - uwsm
       - waybar
       - wlogout
@@ -116,6 +114,5 @@ modules:
   - type: systemd
     system:
       enabled:
-        - greetd.service
         - docker.service
   - type: signing
