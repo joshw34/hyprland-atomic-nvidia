@@ -1,45 +1,121 @@
 ---
-# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-# image will be published to ghcr.io/<user>/<name>
-name: template
-# description will be included in the image's metadata
-description: This is my personal OS image.
-
-# the base image to build on top of (FROM) and the version tag to use
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 42 # latest is also supported if you want new updates ASAP
-
-# module configuration, executed in order
-# you can include multiple instances of the same module
+name: hyprland-atomic-nvidia
+description: Fedora Atomic with Hyprland (Nvidia)
+base-image: ghcr.io/blue-build/base-images/fedora-base-nvidia
+image-version: latest
 modules:
+  - type: dnf
+    repos:
+      nonfree: rpmfusion
   - type: files
     files:
       - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
-
-  - type: dnf
+        destination: /
+  - type: brew
+    nofile-limits: true
+    brew-analytics: false
+  - type: rpm-ostree 
     repos:
-      copr:
-        - atim/starship
+      - https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+      - https://copr.fedorainfracloud.org/coprs/solopasha/hyprland/repo/fedora-%OS_VERSION%/solopasha-hyprland-fedora-%OS_VERSION%.repo
+      - https://copr.fedorainfracloud.org/coprs/tofik/nwg-shell/repo/fedora-%OS_VERSION%/tofik-nwg-shell-fedora-%OS_VERSION%.repo
+      - vscode.repo
+    keys:
+      - https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+      - https://packages.microsoft.com/keys/microsoft.asc
     install:
-      packages:
-        - micro
-        - starship
-    remove:
-      packages:
-        # example: removing firefox (in favor of the flatpak)
-        # "firefox" is the main package, "firefox-langpacks" is a dependency
-        - firefox
-        - firefox-langpacks # also remove firefox dependency (not required for all packages, this is a special case)
-
+      # Hyprland Packages
+      - greetd
+      - hypridle
+      - hyprland
+      - hyprlock
+      - hyprpaper
+      - hyprpicker
+      - hyprpolkitagent
+      - hyprshot
+      - rofi-wayland
+      - tuigreet
+      - uwsm
+      - waybar
+      - wlogout
+      - xdg-desktop-portal-hyprland
+      # Desktop packages
+      - bat
+      - brave-browser
+      - btop
+      - code
+      - containerd
+      - docker-cli
+      - docker-compose
+      - docker-compose-switch
+      - discord
+      - firefox
+      - foot
+      - fzf
+      - gcc
+      - gnome-text-editor
+      - gvfs
+      - input-remapper
+      - kitty
+      - libva
+      - libva-intel-media-driver
+      - libva-nvidia-driver
+      - loupe
+      - man-pages
+      - mc
+      - neovim
+      - NetworkManager
+      - NetworkManager-tui
+      - nwg-displays
+      - nwg-look
+      - papers
+      - podman
+      - podman-tui
+      - qalculate-gtk
+      - ripgrep
+      - speedtest-cli
+      - SwayNotificationCenter
+      - tealdeer
+      - thunderbird
+      - thunar
+      - thunar-volman
+      - thunar-archive-plugin
+      - thunar-vcs-plugin
+      - thunar-media-tags-plugin
+      - tmux
+      - tree-sitter-cli
+      - tumbler
+      - unrar
+      - vulkan-tools
+      - wireguard-tools
+      - wl-clipboard
+      - xfconf
+      - xhost
+      - zsh
+      - zsh-autosuggestions
+      - zsh-syntax-highlighting
   - type: default-flatpaks
     configurations:
-      - notify: true # Send notification after install/uninstall is finished (true/false)
+      - notify: false
         scope: system
-        # If no repo information is specified, Flathub will be used by default
-        install: # system flatpaks we want all users to have and not remove
-          - org.mozilla.firefox
-          - org.gnome.Loupe
-      - scope: user # Also add Flathub user repo, but no user packages
-
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+        install:
+          - com.bitwarden.desktop
+          - com.github.tchx84.Flatseal
+          - com.github.iwalton3.jellyfin-media-player
+          - com.moonlight_stream.Moonlight
+          - com.slack.Slack
+          - com.stremio.Stremio
+          - org.localsend.localsend_app
+          - io.github.radiolamp.mangojuice
+          - io.github.benjamimgois.goverlay
+          - com.vysp3r.ProtonPlus
+          - com.termius.Termius
+          - com.valvesoftware.Steam
+          - com.heroicgameslauncher.hgl
+          - net.lutris.Lutris
+  - type: systemd
+    system:
+      enabled:
+        - greetd.service
+        - docker.service
+  - type: signing
