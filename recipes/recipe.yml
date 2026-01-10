@@ -17,10 +17,8 @@ modules:
   - type: fonts
     fonts:
       nerd-fonts:
-        - FiraCode
         - JetBrainsMono
         - SourceCodePro
-        - SpaceMono
   - type: rpm-ostree 
     repos:
       - https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
