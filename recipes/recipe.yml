@@ -41,6 +41,7 @@ modules:
       - xdg-desktop-portal-hyprland
       # Desktop packages
       - bat
+      - blueman
       - brave-browser
       - btop
       - code
@@ -69,6 +70,7 @@ modules:
       - nwg-displays
       - nwg-look
       - papers
+      - pavucontrol
       - podman
       - podman-tui
       - qalculate-gtk
@@ -92,8 +94,6 @@ modules:
       - xfconf
       - xhost
       - zsh
-      - zsh-autosuggestions
-      - zsh-syntax-highlighting
   - type: default-flatpaks
     configurations:
       - notify: false
